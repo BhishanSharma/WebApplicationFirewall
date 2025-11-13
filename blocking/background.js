@@ -1,3 +1,5 @@
+// Service worker for intercepting and BLOCKING requests
+
 let stats = {
   totalRequests: 0,
   blockedRequests: 0,
@@ -124,16 +126,7 @@ function analyzeRequest(details) {
       stats.recentThreats = stats.recentThreats.slice(-50);
     }
     
-    // Show notification
-    browser.tabs.query({active: true, currentWindow: true}).then(tabs => {
-      if (tabs[0]) {
-        browser.tabs.sendMessage(tabs[0].id, {
-          action: 'showWarning',
-          url: details.url,
-          threats: threats
-        }).catch(() => {}); // Ignore if content script not ready
-      }
-    });
+
   } else {
     stats.allowedRequests++;
   }
